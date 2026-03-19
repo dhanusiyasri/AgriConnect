@@ -1,0 +1,484 @@
+Backend
+
+---
+
+# 🚜 Smart Farm Machinery Booking Platform
+
+# Final Backend Architecture (Supabase-Based)
+
+---
+
+# 1️⃣ Overall System Architecture
+
+```
+Flutter Mobile App
+        │
+        │
+Voice Booking Layer
+(speech_to_text + flutter_tts)
+        │
+        ▼
+ Supabase Client SDK
+        │
+ ┌───────────────┬───────────────┬───────────────┐
+ │               │               │               │
+Auth           Database        Storage        Realtime
+Service        (PostgreSQL)    Service        Updates
+ │               │               │               │
+ │               │               │               │
+Demo Aadhaar   Equipment       Images        Live Tracking
+Verification   Bookings        Damage        Notifications
+               Payments        Reports
+```
+
+Supabase acts as:
+
+* Authentication server
+* PostgreSQL database
+* API layer
+* File storage
+* Realtime update system
+
+So **no separate backend server is required for the demo project**.
+
+---
+
+# 2️⃣ Core Supabase Services Used
+
+| Supabase Feature    | Purpose                   |
+| ------------------- | ------------------------- |
+| Auth                | User login & identity     |
+| PostgreSQL Database | Store platform data       |
+| Storage             | Equipment & damage images |
+| Realtime            | Live vehicle tracking     |
+| Edge Functions      | Payment & business logic  |
+| Row Level Security  | Data protection           |
+
+---
+
+# 3️⃣ Authentication & Demo Verification
+
+Authentication is handled by Supabase Auth.
+
+User registration fields:
+
+```
+name
+email
+password
+aadhaar_number
+role
+verification_status
+created_at
+```
+
+Demo Aadhaar verification logic:
+
+```
+if length(aadhaar) == 12
+   verification_status = VERIFIED_DEMO
+else
+   verification_status = INVALID
+```
+
+Authentication flow:
+
+```
+User Register
+      ↓
+Supabase Auth creates user
+      ↓
+User profile stored in database
+      ↓
+Demo Aadhaar validation
+      ↓
+User login enabled
+```
+
+Security:
+
+* Supabase JWT tokens
+* Row Level Security policies
+* Password encryption handled by Supabase
+
+---
+
+# 4️⃣ Database Architecture (Supabase PostgreSQL)
+
+Main tables:
+
+```
+users
+equipment
+bookings
+payments
+tracking
+insurance_claims
+reviews
+notifications
+```
+
+---
+
+# USERS TABLE
+
+```
+id (uuid)
+name
+email
+aadhaar_number
+role (farmer / owner)
+verification_status
+created_at
+```
+
+---
+
+# EQUIPMENT TABLE
+
+```
+equipment_id
+owner_id
+equipment_name
+equipment_type
+hourly_price
+driver_available
+driver_price_per_hour
+location_lat
+location_lng
+availability_status
+created_at
+```
+
+---
+
+# BOOKINGS TABLE
+
+```
+booking_id
+farmer_id
+equipment_id
+owner_id
+hours
+driver_required
+hourly_price
+driver_price
+total_price
+status
+created_at
+```
+
+Booking status:
+
+```
+REQUESTED
+OWNER_ACCEPTED
+REJECTED
+PAYMENT_PENDING
+CONFIRMED
+IN_PROGRESS
+COMPLETED
+CANCELLED
+```
+
+---
+
+# PAYMENTS TABLE
+
+```
+payment_id
+booking_id
+amount
+payment_status
+stripe_payment_intent
+created_at
+```
+
+Payments processed through:
+
+Stripe sandbox.
+
+---
+
+# TRACKING TABLE
+
+```
+tracking_id
+booking_id
+equipment_id
+current_lat
+current_lng
+timestamp
+```
+
+Used for vehicle tracking with:
+
+OpenStreetMap.
+
+---
+
+# INSURANCE CLAIM TABLE
+
+```
+claim_id
+booking_id
+equipment_id
+damage_description
+damage_images
+claim_status
+insurance_provider
+created_at
+```
+
+Possible partners:
+
+* ICICI Lombard
+* Bajaj Allianz General Insurance
+* HDFC ERGO General Insurance
+
+---
+
+# 5️⃣ Equipment Service
+
+Owners can:
+
+Add equipment
+Update equipment
+Manage availability
+
+Supabase queries from Flutter:
+
+```
+insert into equipment
+select * from equipment
+update equipment
+delete equipment
+```
+
+Location-based search:
+
+```
+nearby equipment query using latitude and longitude
+```
+
+---
+
+# 6️⃣ Booking Service
+
+Booking workflow:
+
+```
+Farmer submits request
+       ↓
+Owner receives notification
+       ↓
+Owner accepts or rejects
+       ↓
+Payment step
+       ↓
+Booking confirmed
+```
+
+Supabase triggers can automate:
+
+* booking status updates
+* notifications
+* payment state changes
+
+---
+
+# 7️⃣ Payment Service (Stripe)
+
+Payment is handled through:
+
+Stripe sandbox.
+
+Payment flow:
+
+```
+Booking Accepted
+      ↓
+Flutter requests payment intent
+      ↓
+Supabase Edge Function
+      ↓
+Stripe Payment Intent created
+      ↓
+User pays
+      ↓
+Stripe Webhook
+      ↓
+Payment status updated
+      ↓
+Booking confirmed
+```
+
+Edge functions used for:
+
+```
+create-payment-intent
+stripe-webhook-handler
+```
+
+---
+
+# 8️⃣ Map & Tracking Service
+
+Map system uses:
+
+OpenStreetMap.
+
+Tracking flow:
+
+```
+Driver phone sends location
+      ↓
+Supabase tracking table updated
+      ↓
+Realtime update triggered
+      ↓
+Flutter app receives live location
+```
+
+Supabase realtime enables **live vehicle tracking**.
+
+---
+
+# 9️⃣ Insurance Claim System
+
+Damage reporting flow:
+
+```
+Work Completed
+      ↓
+Owner reports damage
+      ↓
+Damage report stored
+      ↓
+Minor damage → farmer pays
+Major damage → insurance claim
+```
+
+Damage photos stored in **Supabase Storage**.
+
+---
+
+# 🔟 Image Storage
+
+Supabase Storage stores:
+
+```
+equipment_images/
+damage_reports/
+user_profiles/
+```
+
+Images accessed via secure URLs.
+
+---
+
+# 1️⃣1️⃣ Notification System
+
+Notifications generated for:
+
+```
+Booking request
+Owner acceptance
+Owner rejection
+Payment success
+Vehicle arrival
+Damage report
+```
+
+Implementation:
+
+```
+notifications table
+Supabase realtime
+Flutter push notifications
+```
+
+---
+
+# 1️⃣2️⃣ Voice Booking Integration
+
+Voice booking runs **on the Flutter client**, not backend.
+
+Flow:
+
+```
+Voice input
+      ↓
+Speech-to-text
+      ↓
+Conversation state manager
+      ↓
+Booking data created
+      ↓
+Supabase booking insert
+```
+
+Steps captured:
+
+```
+machine
+hours
+driver option
+location
+confirmation
+```
+
+---
+
+# ⭐ Final Architecture Summary
+
+Your **Supabase-based backend system** now includes:
+
+Authentication
+
+* Supabase Auth
+* Demo Aadhaar verification
+
+Database
+
+* PostgreSQL via Supabase
+
+Marketplace
+
+* Equipment listing
+* Location-based search
+
+Booking System
+
+* Owner approval workflow
+* Hourly pricing
+* Driver / no-driver option
+
+Voice Booking
+
+* Guided voice assistant
+
+Payments
+
+* Stripe sandbox integration
+
+Maps & Tracking
+
+* OpenStreetMap integration
+* Supabase realtime tracking
+
+Safety
+
+* Insurance claim system
+
+Storage
+
+* Supabase storage for images
+
+Notifications
+
+* Supabase realtime events
+
+---
+
+✅ This is the **final completed backend architecture optimized for Supabase** and fully aligned with your **Flutter + voice booking farming machinery platform**.

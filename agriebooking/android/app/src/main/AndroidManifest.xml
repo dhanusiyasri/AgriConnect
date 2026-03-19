@@ -1,0 +1,92 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- PERMISSIONS REQUIRED FOR AGRIEBOOKING APP  -->
+    <!-- ══════════════════════════════════════════ -->
+
+    <!-- Network -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- GPS / Location (required for tracking + weather) -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <!-- Microphone (required for voice booking assistant) -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
+    <!-- Camera + Storage (required for damage report image upload) -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29"/>
+    <!-- For Android 13+ media access -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+
+    <!-- Phone + SMS (for contacting owners via tracking screen) -->
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+
+    <!-- Vibration (for notification feedback) -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
+    <application
+        android:label="AgriConnect"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:taskAffinity=""
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            <meta-data
+              android:name="io.flutter.embedding.android.NormalTheme"
+              android:resource="@style/NormalTheme"
+              />
+
+            <!-- Main Launcher Intent -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+            <!-- ════════════════════════════════════════════ -->
+            <!-- SUPABASE DEEP LINK for Auth Email Callbacks  -->
+            <!-- ════════════════════════════════════════════ -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <!-- Replace 'agriconnect' with your custom scheme defined in Supabase dashboard -->
+                <data
+                    android:scheme="io.supabase.agriebooking"
+                    android:host="login-callback"/>
+            </intent-filter>
+        </activity>
+
+        <!-- Flutter tool meta-data -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+    </application>
+
+    <!-- Required for text selection activities -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT"/>
+            <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- Required for url_launcher to call phone and SMS -->
+        <intent>
+            <action android:name="android.intent.action.DIAL"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SENDTO"/>
+            <data android:scheme="smsto"/>
+        </intent>
+    </queries>
+</manifest>

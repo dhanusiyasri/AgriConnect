@@ -1,0 +1,444 @@
+Features
+
+---
+
+# 🚜 Smart Farm Machinery Booking Platform
+
+## Final Feature List 
+
+---
+
+# 1️⃣ User Registration & Login
+
+The system supports **two types of users**:
+
+### Farmers
+
+Users who want to rent agricultural machinery.
+
+### Equipment Owners
+
+Users who own tractors or farm equipment and rent them out.
+
+### Registration Details (Demo Prototype)
+
+Users register with:
+
+* Name
+* Email address
+* Password
+* Aadhaar number *(demo identity reference only)*
+* User role *(Farmer / Owner)*
+
+⚠️ Aadhaar number is used **only for demonstration purposes** and is **not verified with government APIs**.
+
+### Login
+
+Users log in using:
+
+* Email
+* Password
+
+---
+
+# 2️⃣ Equipment Listing (Owner Side)
+
+Equipment owners can list their machinery.
+
+Details include:
+
+* Equipment name
+* Equipment type
+* Equipment images
+* **Price per hour**
+* Driver availability
+* Driver hourly charge *(optional)*
+* Equipment location
+* Availability schedule
+
+---
+
+# 3️⃣ Supported Equipment Types
+
+Examples of supported machines:
+
+* Tractor
+* Rotavator
+* Harvester
+* Seed drill
+* Sprayer
+* Plough
+* Water tanker
+
+---
+
+# 4️⃣ Equipment Search & Filtering
+
+Farmers can search equipment based on:
+
+* Equipment type
+* Location
+* Price
+* Availability
+
+This allows farmers to **quickly find nearby machinery**.
+
+---
+
+# 5️⃣ Map-Based Equipment Discovery
+
+The system uses **OpenStreetMap demo integration**.
+
+Features include:
+
+* Display nearby machinery on map
+* Show equipment location
+* Show distance from farmer
+
+---
+
+# 6️⃣ Real-Time Availability Calendar
+
+Each machine has a **booking calendar**.
+
+Farmers can see:
+
+* Available time slots
+* Booked time slots
+
+This prevents **double bookings**.
+
+---
+
+# 7️⃣ Hourly Pricing System
+
+All rentals use **hourly pricing only**.
+
+Example:
+
+* Tractor → ₹500/hour
+* Harvester → ₹900/hour
+
+Farmers select:
+
+* Date
+* Number of hours
+
+---
+
+# 8️⃣ With Driver / Without Driver Option
+
+Farmers can choose whether to rent machinery:
+
+### With Driver
+
+Charges include:
+
+* Equipment hourly charge
+* Driver hourly charge
+
+Example:
+
+| Item    | Cost      |
+| ------- | --------- |
+| Tractor | ₹500/hour |
+| Driver  | ₹200/hour |
+| Total   | ₹700/hour |
+
+---
+
+### Without Driver
+
+Farmer provides their own operator.
+
+Charges include:
+
+* Equipment hourly charge only.
+
+Example:
+
+Tractor → ₹500/hour
+
+---
+
+# 9️⃣ Owner Approval Booking System
+
+Bookings require **owner approval**.
+
+### Booking Flow
+
+1. Farmer selects equipment.
+2. Chooses **with driver or without driver**.
+3. Sends booking request.
+4. Owner reviews request.
+5. Owner **accepts or rejects** booking.
+
+---
+
+# 🔟 Notification System
+
+Notifications are sent for key updates.
+
+### Farmer Notifications
+
+* Booking accepted/rejected
+* Equipment arrival updates
+* Payment reminders
+
+### Owner Notifications
+
+* New booking requests
+* Booking confirmations
+* Payment updates
+
+---
+
+# 1️⃣1️⃣ Real-Time Vehicle Mapping
+
+Vehicle tracking uses **OpenStreetMap**.
+
+### Farmer Side
+
+Farmers can see:
+
+* Vehicle location
+* Route to farm
+* Estimated arrival time (ETA)
+
+### Owner Side
+
+Owners can track:
+
+* Vehicle movement
+* Route history
+* Work progress
+
+---
+
+# 1️⃣2️⃣ Ratings & Reviews
+
+Farmers can rate equipment owners based on:
+
+* Equipment condition
+* Service quality
+* Timeliness
+
+This builds **trust in the platform**.
+
+---
+
+# 1️⃣3️⃣ Emergency Equipment Request
+
+Farmers can send **urgent machinery requests**.
+
+Nearby owners receive notifications.
+
+---
+
+# 1️⃣4️⃣ AI-Based Equipment Recommendation
+
+The system suggests suitable machines based on **farming activities**.
+
+Example:
+
+* Land preparation → Rotavator
+* Harvesting → Harvester
+
+---
+
+# 1️⃣5️⃣ Seasonal Demand Prediction
+
+The system predicts **equipment demand based on farming seasons**.
+
+Example:
+
+* Harvest season → Higher harvester demand
+* Ploughing season → Higher tractor demand
+
+---
+
+# 1️⃣6️⃣ Weather Forecast Integration
+
+The app shows **local weather forecasts** to help farmers plan agricultural work.
+
+---
+
+# 1️⃣7️⃣ Guided Voice Booking Feature 🎤
+
+The app includes a **Simple Guided Voice Booking Assistant**.
+
+Instead of full AI conversation, the app asks **step-by-step questions** and processes voice responses.
+
+### Voice Interaction Flow
+
+1. User presses **voice booking button 🎤**
+2. App asks guided questions
+3. User answers using voice
+4. App extracts keywords
+5. Booking details are generated
+
+Example:
+
+App: *Which machine do you want?*
+User: Tractor
+
+App: *For how many hours?*
+User: 3 hours
+
+App: *Do you need a driver?*
+User: Yes
+
+App: *Confirm booking tractor for 3 hours with driver?*
+
+---
+
+### Technologies Used
+
+Voice recognition:
+
+* Flutter package **speech_to_text**
+
+Voice guidance:
+
+* Flutter package **flutter_tts**
+
+These packages enable:
+
+* Voice input (Speech → Text)
+* Voice prompts (Text → Speech)
+
+---
+
+### Conversation State Manager
+
+The system tracks booking progress using **conversation steps**:
+
+Step 0 → Machine selection
+Step 1 → Duration
+Step 2 → Driver option
+Step 3 → Confirmation
+
+---
+
+### Supported Languages
+
+Voice recognition can support:
+
+* English (`en_IN`)
+* Tamil (`ta_IN`)
+* Hindi (`hi_IN`)
+
+Example Tamil command:
+
+“எனக்கு டிராக்டர் வேண்டும்”
+
+---
+
+### Safety Confirmation Screen
+
+Because voice recognition may make mistakes, the system always shows a **confirmation screen**.
+
+Example:
+
+Machine: Tractor
+Duration: 3 Hours
+Driver: Yes
+
+[Confirm Booking]
+
+---
+
+# 1️⃣8️⃣ Payment Integration
+
+Payments are implemented using **Stripe sandbox testing environment**.
+
+Supported payment methods:
+
+* Card payments
+* Online payment simulation in test mode
+
+---
+
+# 1️⃣9️⃣ Payment Methods
+
+Two payment options are available.
+
+### Pre-Payment
+
+Farmer pays **100% during booking**.
+
+### Partial Payment
+
+Payment split into:
+
+* **25% advance payment**
+* **75% after work completion**
+
+---
+
+# 2️⃣0️⃣ Insurance Partner Integration
+
+To protect expensive machinery, the platform may partner with:
+
+* ICICI Lombard
+* Bajaj Allianz General Insurance
+* HDFC ERGO General Insurance
+
+These services provide **equipment damage coverage**.
+
+---
+
+# 2️⃣1️⃣ Damage & Insurance Claim System
+
+If machinery is damaged during usage:
+
+### Step 1
+
+Owner submits **damage report with photos**.
+
+### Step 2
+
+System evaluates damage.
+
+### Step 3
+
+Two outcomes:
+
+**Minor Damage**
+
+* Farmer pays repair cost.
+
+**Major Damage**
+
+* Insurance claim is initiated through partner company.
+
+### Step 4
+
+Insurance provider processes claim.
+
+---
+
+# ⭐ Final Platform Capabilities
+
+Your system now includes:
+
+* Email + password + Aadhaar *(demo)* authentication
+* Equipment listing marketplace
+* Hourly rental pricing
+* With driver / without driver option
+* Owner approval booking flow
+* Map-based discovery using **OpenStreetMap demo**
+* Real-time vehicle tracking
+* Ratings and reviews
+* Emergency booking requests
+* AI equipment recommendation
+* Seasonal demand prediction
+* Weather forecast integration
+* **Guided voice booking assistant**
+* **Stripe sandbox payment testing**
+* Two payment methods (full / partial)
+* Insurance-based damage protection system
+
+---
+
+✅ This is now a **very strong full feature set** for your project — it combines **marketplace + GPS tracking + voice interface + payments + insurance**, which makes it look like a **real startup-level agriculture platform**. 🚜📱
