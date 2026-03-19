@@ -96,7 +96,6 @@ AgriConnect solves this with:
 
 ## 🏗️ System Architecture
 
-![Architecture](assets/architecture.png)
 
 ```bash
 User (Farmer/Owner)
@@ -113,7 +112,6 @@ Database (PostgreSQL)
 
 ## 📱 App Flow
 
-![Flow](assets/app_flow.png)
 
 1. User selects role (Farmer / Owner)
 2. Login / Signup
@@ -126,7 +124,6 @@ Database (PostgreSQL)
 
 ## 🎤 Voice AI System
 
-![Voice Flow](assets/voice_flow.png)
 
 ### Flow:
 
@@ -145,7 +142,6 @@ Database (PostgreSQL)
 
 ## 🌐 Multilingual System
 
-![Language Flow](assets/language_flow.png)
 
 Supports:
 
@@ -223,18 +219,18 @@ agriconnect/
 ```
 
 ## ⚙️ Installation Guide
-# 1️⃣ Clone repo
+### 1️⃣ Clone repo
 ```bash
 git clone https://github.com/dhanusiyasri/AgriConnect
 cd AgriConnect
 ```
 
-# 2️⃣ Install dependencies
+### 2️⃣ Install dependencies
 ```bash
 flutter pub get
 ```
 
-# 3️⃣ Run project
+### 3️⃣ Run project
 ```bash
 flutter run
 ```
